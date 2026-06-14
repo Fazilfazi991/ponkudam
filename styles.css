@@ -202,6 +202,35 @@ button {
   display: none;
 }
 
+.mobile-hero-slider {
+  aspect-ratio: 1374 / 1145;
+  background: var(--emerald-dark);
+  overflow: hidden;
+  position: relative;
+}
+
+.mobile-hero-slide {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.65s ease;
+  width: 100%;
+}
+
+.mobile-hero-slide.active {
+  opacity: 1;
+}
+
+.mobile-slide-actions {
+  bottom: 48px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
 .hero-image {
   min-height: 595px;
   overflow: hidden;
@@ -403,6 +432,17 @@ h1 span {
 }
 
 .desktop-hero-slider .hero-slide-cta.active {
+  display: inline-flex;
+}
+
+.mobile-hero-slider .mobile-slide-cta {
+  display: none;
+  min-height: 43px;
+  min-width: 154px;
+  padding: 0 22px;
+}
+
+.mobile-hero-slider .mobile-slide-cta.active {
   display: inline-flex;
 }
 
@@ -1236,35 +1276,18 @@ h1 span {
   }
 
   .hero {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: block;
   }
 
-  .hero-image,
-  .hero {
-    min-height: 295px;
-  }
-
-  .hero-copy {
-    min-height: 335px;
-    padding: 36px 24px 40px;
-  }
-
-  h1 {
-    font-size: 43px;
-  }
-
-  .hero-copy .eyebrow {
-    font-size: 12px;
-  }
-
-  .hero-text {
-    margin: 20px 0 24px;
+  .mobile-hero-slider {
+    min-height: 0;
   }
 
   .hero-dots {
-    bottom: 17px;
-    right: 20px;
+    bottom: 19px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
   }
 
   .hero-actions,
@@ -1276,6 +1299,10 @@ h1 span {
 
   .btn {
     width: 100%;
+  }
+
+  .mobile-slide-actions .btn {
+    width: auto;
   }
 
   .trust-strip {
@@ -1477,6 +1504,16 @@ h1 span {
 
   h1 {
     font-size: 38px;
+  }
+
+  .mobile-slide-actions {
+    bottom: 42px;
+  }
+
+  .mobile-slide-cta {
+    min-height: 40px;
+    min-width: 144px;
+    padding: 0 18px;
   }
 
   .collection-card {

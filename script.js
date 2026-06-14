@@ -1,6 +1,7 @@
 const menuToggle = document.querySelector(".menu-toggle");
 const navMenu = document.querySelector(".nav-menu");
 const desktopSlider = document.querySelector(".desktop-hero-slider");
+const mobileSlider = document.querySelector(".mobile-hero-slider");
 
 if (window.lucide) {
   window.lucide.createIcons();
@@ -20,11 +21,13 @@ navMenu?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-if (desktopSlider) {
-  const slides = [...desktopSlider.querySelectorAll(".hero-slide")];
-  const dots = [...desktopSlider.querySelectorAll(".hero-dots button")];
-  const ctas = [...desktopSlider.querySelectorAll(".hero-slide-cta")];
-  const desktopSliderQuery = window.matchMedia("(min-width: 761px)");
+const setupHeroSlider = ({ slider, slideSelector, ctaSelector, mediaQuery }) => {
+  if (!slider) return;
+
+  const slides = [...slider.querySelectorAll(slideSelector)];
+  const dots = [...slider.querySelectorAll(".hero-dots button")];
+  const ctas = [...slider.querySelectorAll(ctaSelector)];
+  const sliderQuery = window.matchMedia(mediaQuery);
   let currentSlide = 0;
   let sliderTimer;
   let sliderLoaded = false;
@@ -58,7 +61,7 @@ if (desktopSlider) {
   };
 
   const loadDesktopSlider = () => {
-    if (sliderLoaded || !desktopSliderQuery.matches) return;
+    if (sliderLoaded || !sliderQuery.matches) return;
     slides.forEach((slide) => {
       if (slide.dataset.src) {
         slide.loading = "eager";
@@ -74,13 +77,13 @@ if (desktopSlider) {
       stopSlider();
       showSlide(dotIndex);
       loadDesktopSlider();
-      if (desktopSliderQuery.matches) startSlider();
+      if (sliderQuery.matches) startSlider();
     });
   });
 
   loadDesktopSlider();
 
-  desktopSliderQuery.addEventListener("change", (event) => {
+  sliderQuery.addEventListener("change", (event) => {
     if (event.matches) {
       loadDesktopSlider();
       startSlider();
@@ -88,4 +91,18 @@ if (desktopSlider) {
       stopSlider();
     }
   });
-}
+};
+
+setupHeroSlider({
+  slider: desktopSlider,
+  slideSelector: ".hero-slide",
+  ctaSelector: ".hero-slide-cta",
+  mediaQuery: "(min-width: 761px)",
+});
+
+setupHeroSlider({
+  slider: mobileSlider,
+  slideSelector: ".mobile-hero-slide",
+  ctaSelector: ".mobile-slide-cta",
+  mediaQuery: "(max-width: 760px)",
+});

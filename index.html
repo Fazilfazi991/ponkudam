@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="Sliders/ChatGPT%20Image%20Jun%2014,%202026,%2005_41_45%20AM%20(1).webp" type="image/webp" fetchpriority="high" media="(min-width: 761px)">
+  <link rel="preload" as="image" href="Sliders/m1.webp" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -59,23 +60,19 @@
         </div>
       </div>
 
-      <div class="hero-image mobile-temp-hero">
-        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1400&q=85" alt="Bride wearing emerald saree and gold jewellery" decoding="async">
-        <div class="hero-dots" aria-label="Hero carousel position">
-          <span class="active"></span>
-          <span></span>
-          <span></span>
+      <div class="mobile-hero-slider mobile-temp-hero" aria-label="Mobile jewellery sliders">
+        <img class="mobile-hero-slide active" data-src="Sliders/m1.webp" alt="Crafted for your precious moments" decoding="async">
+        <img class="mobile-hero-slide" data-src="Sliders/m2.webp" alt="Gold that tells your story" loading="lazy" decoding="async">
+        <img class="mobile-hero-slide" data-src="Sliders/m3.webp" alt="Beauty that becomes you" loading="lazy" decoding="async">
+        <div class="mobile-slide-actions">
+          <a class="btn btn-primary mobile-slide-cta active" href="#bridal">Explore Bridal</a>
+          <a class="btn btn-primary mobile-slide-cta" href="#collections">View Collections</a>
+          <a class="btn btn-primary mobile-slide-cta" href="#featured">Shop Jewellery</a>
         </div>
-      </div>
-      <div class="hero-copy mobile-temp-hero">
-        <div class="leaf leaf-one"></div>
-        <div class="leaf leaf-two"></div>
-        <p class="eyebrow">A Heritage of Trust.</p>
-        <h1>Crafted<br>for your<br><span>precious<br>moments.</span></h1>
-        <p class="hero-text">Timeless jewellery, thoughtfully crafted to celebrate every milestone beautifully.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#bridal">Explore Bridal</a>
-          <a class="btn btn-ghost" href="https://wa.me/919876543210"><i data-lucide="message-circle"></i> WhatsApp Us</a>
+        <div class="hero-dots" aria-label="Hero carousel position">
+          <button class="active" type="button" aria-label="Show mobile slide 1"></button>
+          <button type="button" aria-label="Show mobile slide 2"></button>
+          <button type="button" aria-label="Show mobile slide 3"></button>
         </div>
       </div>
     </section>
