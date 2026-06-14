@@ -1230,9 +1230,14 @@ h1 span {
   }
 
   .nav-shell {
-    gap: 14px;
+    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     height: 76px;
     padding: 0 18px;
+  }
+
+  .brand {
+    min-width: 0;
   }
 
   .brand svg {
@@ -1242,6 +1247,12 @@ h1 span {
 
   .brand-logo-image {
     height: 52px;
+  }
+
+  .menu-toggle {
+    grid-column: 2;
+    justify-self: end;
+    padding: 5px;
   }
 
   .brand strong {
@@ -1255,7 +1266,9 @@ h1 span {
   }
 
   .nav-icons {
-    gap: 10px;
+    gap: 13px;
+    grid-column: 3;
+    justify-content: flex-end;
   }
 
   .nav-icons a:nth-child(2),
@@ -1280,11 +1293,13 @@ h1 span {
   }
 
   .mobile-hero-slider {
+    aspect-ratio: auto;
+    height: clamp(278px, 74vw, 304px);
     min-height: 0;
   }
 
   .hero-dots {
-    bottom: 19px;
+    bottom: 15px;
     left: 50%;
     right: auto;
     transform: translateX(-50%);
@@ -1303,6 +1318,17 @@ h1 span {
 
   .mobile-slide-actions .btn {
     width: auto;
+  }
+
+  .mobile-slide-actions {
+    bottom: 37px;
+  }
+
+  .mobile-hero-slider .mobile-slide-cta {
+    font-size: 10px;
+    min-height: 34px;
+    min-width: 128px;
+    padding: 0 16px;
   }
 
   .trust-strip {
@@ -1507,12 +1533,12 @@ h1 span {
   }
 
   .mobile-slide-actions {
-    bottom: 42px;
+    bottom: 34px;
   }
 
-  .mobile-slide-cta {
-    min-height: 40px;
-    min-width: 144px;
+  .mobile-hero-slider .mobile-slide-cta {
+    min-height: 32px;
+    min-width: 120px;
     padding: 0 18px;
   }
 
