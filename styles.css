@@ -1242,16 +1242,29 @@ h1 span {
 
   .hero-image,
   .hero {
-    min-height: 360px;
+    min-height: 295px;
   }
 
   .hero-copy {
-    min-height: 420px;
-    padding: 45px 24px 54px;
+    min-height: 335px;
+    padding: 36px 24px 40px;
   }
 
   h1 {
-    font-size: 48px;
+    font-size: 43px;
+  }
+
+  .hero-copy .eyebrow {
+    font-size: 12px;
+  }
+
+  .hero-text {
+    margin: 20px 0 24px;
+  }
+
+  .hero-dots {
+    bottom: 17px;
+    right: 20px;
   }
 
   .hero-actions,
@@ -1267,12 +1280,23 @@ h1 span {
 
   .trust-strip {
     grid-template-columns: 1fr;
-    padding: 14px 24px;
+    padding: 8px 24px;
   }
 
   .trust-item {
     justify-content: flex-start;
-    padding: 17px 0;
+    min-height: 0;
+    padding: 13px 0;
+  }
+
+  .trust-item svg {
+    height: 27px;
+    min-width: 27px;
+    width: 27px;
+  }
+
+  .trust-item span {
+    font-size: 14px;
   }
 
   .trust-item + .trust-item {
@@ -1281,7 +1305,17 @@ h1 span {
   }
 
   .section {
-    padding: 37px 18px 0;
+    padding: 32px 18px 0;
+  }
+
+  .section-head {
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .section-head h2 {
+    font-size: 24px;
+  }
   }
 
   .collection-grid {
@@ -1307,16 +1341,17 @@ h1 span {
 
   .product-card {
     min-height: 0;
+    padding: 16px 15px;
   }
 
   .product-card img {
-    height: 250px;
+    height: 220px;
   }
 
   .promo-banner,
   .showroom-banner {
-    min-height: 430px;
-    padding: 36px 24px;
+    min-height: 365px;
+    padding: 32px 22px;
   }
 
   .promo-banner::before,
@@ -1326,12 +1361,13 @@ h1 span {
 
   .custom-panel {
     grid-template-columns: 1fr;
-    padding: 0 22px 28px;
+    gap: 24px;
+    padding: 0 22px 26px;
   }
 
   .sketch {
     margin: 0 -22px;
-    min-height: 210px;
+    min-height: 190px;
   }
 
   .custom-copy {
@@ -1344,13 +1380,18 @@ h1 span {
   }
 
   .process {
-    gap: 18px;
+    gap: 16px;
     grid-template-columns: repeat(2, 1fr);
   }
 
   .stats-strip {
-    gap: 24px;
-    padding: 28px;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .stats-strip svg {
+    height: 38px;
+    width: 38px;
   }
 
   .side-arrow {
@@ -1391,14 +1432,24 @@ h1 span {
   }
 
   h1 {
-    font-size: 42px;
+    font-size: 38px;
   }
 
   .collection-card {
-    flex-basis: 82%;
+    flex-basis: 78%;
   }
 
   .process {
     grid-template-columns: 1fr;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
+
+  .promo-banner h2,
+  .custom-panel h2,
+  .showroom-banner h2 {
+    font-size: 31px;
   }
 }
