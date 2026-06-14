@@ -1294,12 +1294,12 @@ h1 span {
 
   .mobile-hero-slider {
     aspect-ratio: auto;
-    height: clamp(278px, 74vw, 304px);
+    height: clamp(252px, 70vw, 278px);
     min-height: 0;
   }
 
   .hero-dots {
-    bottom: 15px;
+    bottom: 10px;
     left: 50%;
     right: auto;
     transform: translateX(-50%);
@@ -1321,14 +1321,19 @@ h1 span {
   }
 
   .mobile-slide-actions {
-    bottom: 37px;
+    bottom: 30px;
+    width: max-content;
   }
 
   .mobile-hero-slider .mobile-slide-cta {
-    font-size: 10px;
-    min-height: 34px;
-    min-width: 128px;
-    padding: 0 16px;
+    font-size: 8px;
+    line-height: 1;
+    max-width: 126px;
+    min-height: 29px;
+    min-width: 0;
+    padding: 0 12px;
+    white-space: nowrap;
+    width: max-content;
   }
 
   .trust-strip {
@@ -1533,13 +1538,14 @@ h1 span {
   }
 
   .mobile-slide-actions {
-    bottom: 34px;
+    bottom: 29px;
   }
 
   .mobile-hero-slider .mobile-slide-cta {
-    min-height: 32px;
-    min-width: 120px;
-    padding: 0 18px;
+    max-width: 122px;
+    min-height: 28px;
+    min-width: 0;
+    padding: 0 11px;
   }
 
   .collection-card {
