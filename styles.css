@@ -30,6 +30,18 @@ body {
   line-height: 1.65;
 }
 
+body.motion-ready .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+body.motion-ready .reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 img {
   display: block;
   width: 100%;
@@ -76,7 +88,13 @@ button {
 .brand-logo-image {
   height: 64px;
   object-fit: contain;
+  transition: filter 0.3s ease, transform 0.3s ease;
   width: auto;
+}
+
+.brand:hover .brand-logo-image {
+  filter: drop-shadow(0 0 12px rgba(197, 154, 61, 0.24));
+  transform: translateY(-1px);
 }
 
 .brand svg {
@@ -149,7 +167,14 @@ button {
 .nav-icons svg,
 .menu-toggle svg {
   height: 21px;
+  transition: stroke 0.25s ease, transform 0.25s ease;
   width: 21px;
+}
+
+.nav-icons a:hover svg,
+.menu-toggle:hover svg {
+  stroke: var(--gold);
+  transform: translateY(-2px);
 }
 
 .menu-toggle {
@@ -183,12 +208,14 @@ button {
   object-fit: cover;
   opacity: 0;
   position: absolute;
-  transition: opacity 0.65s ease;
+  transform: scale(1.025);
+  transition: opacity 0.65s ease, transform 5.5s ease;
   width: 100%;
 }
 
 .hero-slide.active {
   opacity: 1;
+  transform: scale(1);
 }
 
 .hero-slide-actions {
@@ -215,12 +242,14 @@ button {
   object-fit: cover;
   opacity: 0;
   position: absolute;
-  transition: opacity 0.65s ease;
+  transform: scale(1.025);
+  transition: opacity 0.65s ease, transform 5s ease;
   width: 100%;
 }
 
 .mobile-hero-slide.active {
   opacity: 1;
+  transform: scale(1);
 }
 
 .mobile-slide-actions {
@@ -265,12 +294,18 @@ button {
   cursor: pointer;
   height: 5px;
   padding: 0;
+  transition: background 0.25s ease, transform 0.25s ease, width 0.25s ease;
   width: 5px;
 }
 
 .hero-dots .active {
   background: var(--gold);
   width: 30px;
+}
+
+.hero-dots button:hover {
+  background: rgba(197, 154, 61, 0.85);
+  transform: scale(1.18);
 }
 
 .hero-copy {
@@ -402,6 +437,7 @@ h1 span {
 }
 
 .btn:hover {
+  box-shadow: 0 12px 24px rgba(0, 43, 36, 0.14);
   transform: translateY(-2px);
 }
 
@@ -467,6 +503,7 @@ h1 span {
   justify-content: center;
   min-height: 55px;
   padding: 0 18px;
+  transition: background 0.28s ease, transform 0.28s ease;
 }
 
 .trust-item + .trust-item {
@@ -478,6 +515,16 @@ h1 span {
   height: 32px;
   min-width: 32px;
   stroke-width: 1.6;
+  transition: transform 0.28s ease;
+}
+
+.trust-item:hover {
+  background: rgba(255, 249, 239, 0.52);
+  transform: translateY(-2px);
+}
+
+.trust-item:hover svg {
+  transform: translateY(-2px) scale(1.08);
 }
 
 .trust-item span {
@@ -552,6 +599,8 @@ h1 span {
   color: var(--ivory);
   overflow: hidden;
   position: relative;
+  transform: translateZ(0);
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
 }
 
 .collection-card::after {
@@ -559,6 +608,7 @@ h1 span {
   content: "";
   inset: 0;
   position: absolute;
+  transition: opacity 0.28s ease;
 }
 
 .collection-card img {
@@ -585,15 +635,22 @@ h1 span {
 .collection-card svg {
   color: var(--gold);
   height: 18px;
+  transition: transform 0.28s ease;
   width: 18px;
 }
 
 .collection-card:hover {
   border-color: rgba(197, 154, 61, 0.85);
+  box-shadow: 0 18px 34px rgba(0, 43, 36, 0.2);
+  transform: translateY(-6px);
 }
 
 .collection-card:hover img {
   transform: scale(1.07);
+}
+
+.collection-card:hover svg {
+  transform: translateX(4px);
 }
 
 .featured {
@@ -632,10 +689,11 @@ h1 span {
   overflow: hidden;
   padding: 18px 16px 17px;
   position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .product-card:hover {
+  border-color: rgba(197, 154, 61, 0.42);
   box-shadow: var(--shadow);
   transform: translateY(-5px);
 }
@@ -678,6 +736,7 @@ h1 span {
   justify-content: center;
   padding: 0;
   position: absolute;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
 .heart {
@@ -700,6 +759,13 @@ h1 span {
   width: 18px;
 }
 
+.heart:hover,
+.bag:hover {
+  background: #fffaf1;
+  color: var(--emerald);
+  transform: translateY(-2px) scale(1.06);
+}
+
 .promo-banner,
 .showroom-banner {
   border: 1px solid rgba(197, 154, 61, 0.26);
@@ -708,6 +774,7 @@ h1 span {
   overflow: hidden;
   padding: 56px 54px;
   position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .promo-banner::before,
@@ -728,6 +795,13 @@ h1 span {
   max-width: 455px;
   position: relative;
   z-index: 1;
+}
+
+.promo-banner:hover,
+.showroom-banner:hover {
+  border-color: rgba(197, 154, 61, 0.5);
+  box-shadow: 0 18px 45px rgba(54, 36, 10, 0.12);
+  transform: translateY(-3px);
 }
 
 .promo-banner h2,
@@ -758,6 +832,12 @@ h1 span {
   min-height: 310px;
   overflow: hidden;
   padding: 0 34px 0 0;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-panel:hover {
+  border-color: rgba(197, 154, 61, 0.42);
+  box-shadow: 0 18px 40px rgba(54, 36, 10, 0.1);
 }
 
 .sketch {
@@ -805,7 +885,12 @@ h1 span {
   color: var(--gold);
   height: 31px;
   stroke-width: 1.3;
+  transition: transform 0.28s ease;
   width: 31px;
+}
+
+.process div:hover svg {
+  transform: translateY(-3px) scale(1.08);
 }
 
 .process strong {
@@ -837,7 +922,24 @@ h1 span {
   color: var(--ivory);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  overflow: hidden;
   padding: 34px 44px;
+  position: relative;
+}
+
+.stats-strip::after {
+  background: linear-gradient(110deg, transparent, rgba(255, 249, 239, 0.14), transparent);
+  content: "";
+  height: 100%;
+  left: -35%;
+  position: absolute;
+  top: 0;
+  transform: skewX(-18deg);
+  width: 28%;
+}
+
+.stats-strip.in-view::after {
+  animation: stat-shine 1.2s ease 0.25s both;
 }
 
 .stats-strip div {
@@ -852,7 +954,12 @@ h1 span {
   grid-row: span 2;
   height: 46px;
   stroke-width: 1.5;
+  transition: transform 0.3s ease;
   width: 46px;
+}
+
+.stats-strip div:hover svg {
+  transform: rotate(-6deg) scale(1.08);
 }
 
 .stats-strip strong {
@@ -886,6 +993,13 @@ h1 span {
   border-radius: 6px;
   min-height: 205px;
   padding: 28px 28px 20px;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(197, 154, 61, 0.42);
+  box-shadow: 0 14px 30px rgba(54, 36, 10, 0.09);
+  transform: translateY(-4px);
 }
 
 .testimonial-card > p {
@@ -1008,7 +1122,7 @@ h1 span {
 
 .gallery-strip img:hover {
   box-shadow: 0 14px 30px rgba(54, 36, 10, 0.14);
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .footer {
@@ -1129,6 +1243,42 @@ h1 span {
 .back-top svg {
   height: 17px;
   width: 17px;
+}
+
+.back-top {
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.back-top:hover {
+  background: var(--gold);
+  color: var(--emerald-dark);
+  transform: translateY(-3px);
+}
+
+@keyframes stat-shine {
+  from {
+    left: -35%;
+  }
+
+  to {
+    left: 115%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  body.motion-ready .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (max-width: 1080px) {

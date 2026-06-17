@@ -21,6 +21,83 @@ navMenu?.querySelectorAll("a").forEach((link) => {
   });
 });
 
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const revealTargets = [
+  ".trust-item",
+  ".section-head",
+  ".collection-card",
+  ".product-card",
+  ".promo-banner",
+  ".custom-panel",
+  ".stats-strip",
+  ".testimonial-card",
+  ".showroom-banner",
+  ".gallery-strip img",
+  ".footer-grid > *",
+];
+
+if (!reducedMotion && "IntersectionObserver" in window) {
+  document.body.classList.add("motion-ready");
+
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("in-view");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.14, rootMargin: "0px 0px -40px" }
+  );
+
+  revealTargets.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((element, index) => {
+      element.classList.add("reveal");
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 7, 6) * 55}ms`);
+      revealObserver.observe(element);
+    });
+  });
+}
+
+const formatStatValue = (value, suffix) => {
+  if (suffix === "%") return `${value}%`;
+  return `${new Intl.NumberFormat("en-IN").format(value)}${suffix}`;
+};
+
+const animateStat = (stat) => {
+  const original = stat.textContent.trim();
+  const suffix = original.includes("%") ? "%" : original.includes("+") ? "+" : "";
+  const target = Number(original.replace(/[^\d]/g, ""));
+  if (!target) return;
+
+  const duration = 1200;
+  const start = performance.now();
+
+  const tick = (time) => {
+    const progress = Math.min((time - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    stat.textContent = formatStatValue(Math.round(target * eased), suffix);
+    if (progress < 1) window.requestAnimationFrame(tick);
+  };
+
+  window.requestAnimationFrame(tick);
+};
+
+if (!reducedMotion && "IntersectionObserver" in window) {
+  const statsObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.querySelectorAll("strong").forEach(animateStat);
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.45 }
+  );
+
+  document.querySelectorAll(".stats-strip").forEach((strip) => statsObserver.observe(strip));
+}
+
 const setupHeroSlider = ({ slider, slideSelector, ctaSelector, mediaQuery }) => {
   if (!slider) return;
 
