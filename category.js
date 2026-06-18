@@ -62,7 +62,6 @@ if (data) {
           <button class="heart" type="button" aria-label="Add ${product.name} to wishlist"><i data-lucide="heart"></i></button>
           <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">
           <h3>${product.name}</h3>
-          <button class="bag" type="button" aria-label="Enquire about ${product.name}"><i data-lucide="message-circle"></i></button>
         </article>
       `
     )
@@ -70,7 +69,7 @@ if (data) {
 
   document.querySelectorAll(".category-tabs a").forEach((link) => {
     const href = link.getAttribute("href");
-    link.classList.toggle("active", href === `${currentCategory}.html`);
+    link.classList.toggle("active", href === `/${currentCategory}`);
   });
 
   if (window.lucide) {
