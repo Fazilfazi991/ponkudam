@@ -34,24 +34,10 @@ const categoryData = {
     eyebrow: "Ponkudam Collections",
     copy: "Elegant pendant sets and refined pieces designed for gifting, occasions, and signature styling.",
     heroImage: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_33_10%20AM%20(5).webp",
-    products: [
-      {
-        name: "Peacock Diamond Pendant Set",
-        image: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_33_10%20AM%20(5).webp",
-      },
-      {
-        name: "Emerald Pendant Necklace",
-        image: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_33_09%20AM%20(1).webp",
-      },
-      {
-        name: "Diamond Solitaire Pendant",
-        image: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_33_10%20AM%20(4).webp",
-      },
-      {
-        name: "Classic Diamond Pendant",
-        image: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_24_57%20AM%20(2).webp",
-      },
-    ],
+    products: Array.from({ length: 5 }, (_, index) => ({
+      name: `Diamond Pendant ${String(index + 1).padStart(2, "0")}`,
+      image: `images/pendants/webp/ponkudam_pdf4_product_${String(index + 1).padStart(2, "0")}_800x1000.webp`,
+    })),
   },
 };
 
@@ -76,7 +62,6 @@ if (data) {
           <button class="heart" type="button" aria-label="Add ${product.name} to wishlist"><i data-lucide="heart"></i></button>
           <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">
           <h3>${product.name}</h3>
-          <p>Showcase Collection</p>
           <button class="bag" type="button" aria-label="Enquire about ${product.name}"><i data-lucide="message-circle"></i></button>
         </article>
       `

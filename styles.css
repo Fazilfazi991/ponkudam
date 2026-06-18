@@ -732,20 +732,26 @@ h1 span {
 }
 
 .category-hero {
-  align-items: stretch;
-  display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
-  height: clamp(400px, 38vw, 500px);
+  border: 1px solid rgba(197, 154, 61, 0.22);
+  border-radius: 7px;
+  box-shadow: 0 18px 45px rgba(54, 36, 10, 0.08);
+  height: clamp(360px, 32vw, 430px);
   margin: 0 auto;
   max-width: 1240px;
-  padding: 48px 28px 0;
+  overflow: hidden;
+  position: relative;
+  transform: translateZ(0);
 }
 
 .category-hero-copy {
   align-content: center;
-  background: var(--emerald-dark);
+  background: linear-gradient(90deg, rgba(0, 43, 36, 0.94) 0%, rgba(0, 43, 36, 0.78) 43%, rgba(0, 43, 36, 0.08) 72%, rgba(0, 43, 36, 0) 100%);
   color: var(--ivory);
+  height: 100%;
+  max-width: 720px;
   padding: clamp(36px, 5vw, 64px);
+  position: relative;
+  z-index: 1;
 }
 
 .category-hero-copy .eyebrow {
@@ -754,8 +760,9 @@ h1 span {
 
 .category-hero-copy h1 {
   color: var(--ivory);
-  font-size: clamp(54px, 7vw, 86px);
+  font-size: clamp(58px, 7vw, 92px);
   line-height: 0.92;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.26);
 }
 
 .category-hero-copy p:not(.eyebrow) {
@@ -765,12 +772,15 @@ h1 span {
 }
 
 .category-hero-image {
+  inset: 0;
   overflow: hidden;
-  position: relative;
+  position: absolute;
 }
 
 .category-hero-image::after {
-  background: linear-gradient(90deg, rgba(0, 43, 36, 0.34), transparent 40%);
+  background:
+    radial-gradient(circle at 76% 42%, rgba(197, 154, 61, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 43, 36, 0.1));
   content: "";
   inset: 0;
   position: absolute;
@@ -779,6 +789,13 @@ h1 span {
 .category-hero-image img {
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: scale(1.02);
+  transition: transform 5s ease;
+}
+
+.category-hero:hover .category-hero-image img {
+  transform: scale(1);
 }
 
 .category-tabs {
@@ -787,7 +804,7 @@ h1 span {
   gap: 10px;
   margin: 0 auto;
   max-width: 1240px;
-  padding: 28px 28px 0;
+  padding: 24px 28px 0;
 }
 
 .category-tabs a {
@@ -818,18 +835,11 @@ h1 span {
 }
 
 .category-product-card {
-  min-height: 360px;
+  min-height: 340px;
 }
 
 .category-product-card img {
   height: 255px;
-}
-
-.category-product-card p {
-  color: var(--gold);
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
 }
 
 .heart,
@@ -1449,12 +1459,7 @@ h1 span {
   }
 
   .category-hero {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-
-  .category-hero-image {
-    height: 330px;
+    height: 380px;
   }
 
   .category-products {
@@ -1703,20 +1708,27 @@ h1 span {
   }
 
   .category-hero {
-    min-height: 0;
-    padding: 22px 18px 0;
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+    height: 390px;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
   }
 
   .category-hero-copy {
-    padding: 34px 24px;
+    background: linear-gradient(180deg, rgba(0, 43, 36, 0.92) 0%, rgba(0, 43, 36, 0.74) 55%, rgba(0, 43, 36, 0.26) 100%);
+    max-width: none;
+    padding: 34px 36px;
   }
 
   .category-hero-copy h1 {
-    font-size: 48px;
+    font-size: 50px;
   }
 
   .category-hero-image {
-    height: 270px;
+    height: auto;
   }
 
   .category-tabs {
