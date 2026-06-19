@@ -65,6 +65,49 @@ button {
   box-shadow: 0 10px 30px rgba(0, 24, 20, 0.18);
 }
 
+.gold-rate-marquee {
+  background:
+    linear-gradient(90deg, rgba(197, 154, 61, 0.18), transparent 22%, transparent 78%, rgba(197, 154, 61, 0.18)),
+    #001d18;
+  border-bottom: 1px solid rgba(197, 154, 61, 0.34);
+  color: var(--ivory);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  overflow: hidden;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.gold-rate-track {
+  animation: gold-marquee 24s linear infinite;
+  display: flex;
+  gap: 64px;
+  padding: 9px 0;
+  width: max-content;
+}
+
+.gold-rate-track span {
+  color: #fff6df;
+  min-width: max-content;
+  padding-left: 64px;
+}
+
+.gold-rate-track strong {
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.gold-rate-track small {
+  color: rgba(255, 249, 239, 0.72);
+  font-size: inherit;
+}
+
+.gold-rate-marquee:hover .gold-rate-track {
+  animation-play-state: paused;
+}
+
 .nav-shell {
   align-items: center;
   display: grid;
@@ -1382,6 +1425,16 @@ h1 span {
   }
 }
 
+@keyframes gold-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1503,6 +1556,20 @@ h1 span {
 @media (max-width: 760px) {
   body {
     font-size: 14px;
+  }
+
+  .gold-rate-marquee {
+    font-size: 9px;
+  }
+
+  .gold-rate-track {
+    animation-duration: 18s;
+    gap: 38px;
+    padding: 8px 0;
+  }
+
+  .gold-rate-track span {
+    padding-left: 38px;
   }
 
   .nav-shell {
