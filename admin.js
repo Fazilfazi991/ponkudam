@@ -77,14 +77,18 @@ const loadAll = async () => {
     settings: isSuperAdmin || isContentManager ? api("settings") : Promise.resolve({ settings: {} }),
   };
 
-  const [products, categories, enquiries, users, goldRates, settings] = await Promise.all(Object.values(requests));
-  state.products = products.products || [];
-  state.categories = categories.categories || [];
-  state.enquiries = enquiries.enquiries || [];
-  state.users = users.users || [];
-  state.goldRates = goldRates.gold_rates || [];
-  state.settings = settings.settings || {};
+  const [products, categories, enquiries, users, goldRates, settings] = await Promise.allSettled(Object.values(requests));
+  const valueOrEmpty = (result, fallback) => (result.status === "fulfilled" ? result.value : fallback);
+  const failed = [products, categories, enquiries, users, goldRates, settings].find((result) => result.status === "rejected");
+
+  state.products = valueOrEmpty(products, { products: [] }).products || [];
+  state.categories = valueOrEmpty(categories, { categories: [] }).categories || [];
+  state.enquiries = valueOrEmpty(enquiries, { enquiries: [] }).enquiries || [];
+  state.users = valueOrEmpty(users, { users: [] }).users || [];
+  state.goldRates = valueOrEmpty(goldRates, { gold_rates: [] }).gold_rates || [];
+  state.settings = valueOrEmpty(settings, { settings: {} }).settings || {};
   renderAll();
+  if (failed) toast(failed.reason.message);
 };
 
 const renderAll = () => {

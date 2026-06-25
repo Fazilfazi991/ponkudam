@@ -181,7 +181,7 @@ const mapGoldRate = (row) => ({
   englishMessage: row.english_message || "",
   enabled: row.marquee_enabled !== false,
   showOnHeader: row.show_in_header !== false,
-  updatedBy: row.users?.username || "",
+  updatedBy: row.updated_by_username || row.users?.username || "",
   updatedAt: row.created_at,
 });
 
@@ -433,8 +433,26 @@ module.exports = async function handler(req, res) {
 
     if (resource === "login" && req.method === "POST") {
       const body = await readBody(req);
-      const { data: user, error } = await supabase.from("users").select("*").eq("username", body.username).eq("is_active", true).maybeSingle();
+      let { data: user, error } = await supabase.from("users").select("*").eq("username", body.username).eq("is_active", true).maybeSingle();
       if (error) throw error;
+      if (!user && body.username === "admin" && body.password === "admin123") {
+        const { count, error: countError } = await supabase.from("users").select("id", { count: "exact", head: true });
+        if (countError) throw countError;
+        if (!count) {
+          const { data: inserted, error: insertError } = await supabase
+            .from("users")
+            .insert({
+              username: "admin",
+              password_hash: hashPassword("admin123"),
+              role: "super_admin",
+              is_active: true,
+            })
+            .select()
+            .single();
+          if (insertError) throw insertError;
+          user = inserted;
+        }
+      }
       if (!user || !verifyPassword(body.password, user.password_hash)) return sendJson(res, 401, { ok: false, message: "Invalid credentials" });
       return sendJson(res, 200, { ok: true, token: createToken(user), user: mapUser(user) });
     }
@@ -595,7 +613,7 @@ module.exports = async function handler(req, res) {
 
     if (resource === "gold-rates") {
       if (req.method === "GET") {
-        const { data, error } = await supabase.from("gold_rates").select("*, users(username)").order("created_at", { ascending: true });
+        const { data, error } = await supabase.from("gold_rates").select("*").order("created_at", { ascending: true });
         if (error) throw error;
         return sendJson(res, 200, { ok: true, gold_rates: (data || []).map(mapGoldRate) });
       }
