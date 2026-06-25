@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ponkudam Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <main class="admin-login" data-login-view>
+    <form class="admin-login-card" data-login-form>
+      <img src="images/ponkudam_2003_logo_transparent.png" alt="Ponkudam Gold & Diamonds">
+      <p class="eyebrow">Admin Dashboard</p>
+      <h1>Sign In</h1>
+      <label>Username <input name="username" required value="admin"></label>
+      <label>Password <input name="password" required type="password" value="admin123"></label>
+      <button class="btn btn-primary" type="submit">Login</button>
+      <p class="form-note">Default: admin / admin123</p>
+    </form>
+  </main>
+
+  <main class="admin-shell hidden" data-admin-view>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/#home"><img src="images/ponkudam_2003_logo_transparent.png" alt="Ponkudam"></a>
+      <nav data-admin-nav>
+        <button class="active" data-section="dashboard" type="button">Dashboard</button>
+        <button data-section="products" type="button">Products</button>
+        <button data-section="categories" type="button">Categories</button>
+        <button data-section="gold" type="button">Gold Rate</button>
+        <button data-section="enquiries" type="button">Enquiries</button>
+        <button data-section="settings" type="button">Settings</button>
+        <button data-section="users" type="button">Users</button>
+        <button data-logout type="button">Logout</button>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <header class="admin-topbar">
+        <div>
+          <p class="eyebrow" data-role-label></p>
+          <h1 data-page-title>Dashboard</h1>
+        </div>
+        <a class="btn btn-outline" href="/" target="_blank">View Website</a>
+      </header>
+      <div class="admin-toast" data-toast></div>
+
+      <section class="admin-section active" data-panel="dashboard">
+        <div class="metric-grid" data-metrics></div>
+        <div class="admin-two-col">
+          <div class="admin-card"><h2>Recent Products Added</h2><div data-recent-products></div></div>
+          <div class="admin-card"><h2>Recent Enquiries</h2><div data-recent-enquiries></div></div>
+        </div>
+      </section>
+
+      <section class="admin-section" data-panel="products">
+        <div class="admin-card">
+          <div class="table-toolbar">
+            <input data-product-search placeholder="Search products">
+            <select data-product-filter="category"></select>
+            <select data-product-filter="stockStatus"><option value="">All Stock</option><option>In Stock</option><option>Out of Stock</option><option>Made to Order</option></select>
+            <select data-product-filter="status"><option value="">All Status</option><option>Published</option><option>Draft</option><option>Hidden</option></select>
+            <button class="btn btn-primary" data-new-product type="button">Add Product</button>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Code</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody data-products-table></tbody></table></div>
+          <div class="pagination" data-product-pagination></div>
+        </div>
+        <form class="admin-card admin-form hidden" data-product-form>
+          <h2 data-product-form-title>Add Product</h2>
+          <div class="form-grid">
+            <label>Product Name *<input name="name" required></label>
+            <label>Product Code *<input name="code" required></label>
+            <label>Slug / URL<input name="slug"></label>
+            <label>Category *<select name="category" required></select></label>
+            <label>Subcategory<input name="subcategory"></label>
+            <label>Product Type<input name="type"></label>
+          </div>
+          <label>Short Description<textarea name="shortDescription"></textarea></label>
+          <label>Full Description<textarea name="fullDescription"></textarea></label>
+          <div class="form-grid">
+            <label>Metal Type *<select name="metalType" required><option>Gold</option><option>Diamond</option><option>Silver</option><option>Platinum</option></select></label>
+            <label>Purity *<select name="purity" required><option>22K</option><option>24K</option><option>18K</option><option>14K</option></select></label>
+            <label>Weight *<input name="weight" required></label>
+            <label>Stone Details<input name="stoneDetails"></label>
+            <label>Diamond Details<input name="diamondDetails"></label>
+            <label>Price *<input name="price" required type="number"></label>
+            <label>Offer Price<input name="offerPrice" type="number"></label>
+            <label>Price Display<select name="priceMode"><option value="show">Show price</option><option value="contact">Contact for latest price</option><option value="variable">Price may vary based on gold rate</option></select></label>
+            <label>Stock Status *<select name="stockStatus" required><option>In Stock</option><option>Out of Stock</option><option>Made to Order</option></select></label>
+            <label>Product Visibility<select name="status"><option>Published</option><option>Draft</option><option>Hidden</option></select></label>
+          </div>
+          <div class="toggle-row">
+            <label><input name="featured" type="checkbox"> Featured Product</label>
+            <label><input name="newArrival" type="checkbox"> New Arrival</label>
+            <label><input name="bestSeller" type="checkbox"> Best Seller</label>
+            <label><input name="visible" type="checkbox" checked> Visible</label>
+          </div>
+          <div class="image-tools">
+            <label>Featured Image *<input data-featured-upload type="file" accept="image/*"></label>
+            <input name="featuredImage" required placeholder="Featured image URL">
+            <div class="image-preview" data-featured-preview></div>
+            <label>Gallery Images<input data-gallery-upload type="file" accept="image/*" multiple></label>
+            <div class="image-preview" data-gallery-preview></div>
+          </div>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save Product</button><button class="btn btn-outline" data-cancel-product type="button">Cancel</button></div>
+        </form>
+      </section>
+
+      <section class="admin-section" data-panel="categories">
+        <div class="admin-card">
+          <div class="table-toolbar"><button class="btn btn-primary" data-new-category type="button">Add Category</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Slug</th><th>Parent</th><th>Visible</th><th>Sort</th><th>Actions</th></tr></thead><tbody data-categories-table></tbody></table></div>
+        </div>
+        <form class="admin-card admin-form hidden" data-category-form>
+          <h2 data-category-form-title>Add Category</h2>
+          <div class="form-grid">
+            <label>Category Name *<input name="name" required></label>
+            <label>Category Slug *<input name="slug" required></label>
+            <label>Category Image<input name="image"></label>
+            <label>Parent Category<select name="parent"></select></label>
+            <label>Sort Order<input name="sortOrder" type="number"></label>
+            <label>Visibility<select name="visible"><option value="true">Visible</option><option value="false">Hidden</option></select></label>
+          </div>
+          <label>Description<textarea name="description"></textarea></label>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save Category</button><button class="btn btn-outline" data-cancel-category type="button">Cancel</button></div>
+        </form>
+      </section>
+
+      <section class="admin-section" data-panel="gold">
+        <form class="admin-card admin-form" data-gold-form>
+          <h2>Gold Rate Manager</h2>
+          <div class="form-grid">
+            <label>24K Gold Rate - 1 Gram<input name="rate24K" required></label>
+            <label>22K Gold Rate - 1 Gram<input name="rate22K" required></label>
+            <label>22K Gold Rate - 8 Gram<input name="rate22K8g" required></label>
+            <label>18K Gold Rate - 1 Gram<input name="rate18K" required></label>
+            <label>Silver Rate<input name="silverRate"></label>
+            <label>Rate Date<input name="rateDate" type="date"></label>
+            <label>Rate Update Time<input name="rateTime" type="time"></label>
+          </div>
+          <label>English Gold Rate Message<textarea name="englishMessage"></textarea></label>
+          <label>Malayalam Gold Rate Message<textarea name="malayalamMessage"></textarea></label>
+          <div class="toggle-row"><label><input name="enabled" type="checkbox" checked> Enable Marquee</label><label><input name="showOnHeader" type="checkbox" checked> Show on Header</label></div>
+          <button class="btn btn-primary" type="submit">Update Gold Rate</button>
+        </form>
+        <div class="admin-card"><h2>Gold Rate History</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>24K</th><th>22K 1g</th><th>22K 8g</th><th>18K</th><th>Silver</th><th>Updated By</th><th>Action</th></tr></thead><tbody data-gold-table></tbody></table></div></div>
+      </section>
+
+      <section class="admin-section" data-panel="enquiries">
+        <div class="admin-card"><div class="table-wrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Product</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody data-enquiries-table></tbody></table></div></div>
+      </section>
+
+      <section class="admin-section" data-panel="settings">
+        <form class="admin-card admin-form" data-settings-form>
+          <h2>Website Settings</h2>
+          <div class="form-grid">
+            <label>Store Name<input name="storeName"></label>
+            <label>Logo<input name="logo"></label>
+            <label>Contact Number<input name="contactNumber"></label>
+            <label>WhatsApp Number<input name="whatsappNumber"></label>
+            <label>Email<input name="email"></label>
+            <label>Google Map Link<input name="googleMapLink"></label>
+            <label>Facebook Link<input name="facebookLink"></label>
+            <label>Instagram Link<input name="instagramLink"></label>
+            <label>YouTube Link<input name="youtubeLink"></label>
+            <label>BIS / HUID Logo<input name="bisLogo"></label>
+            <label>Opening Hours<input name="openingHours"></label>
+          </div>
+          <label>Address<textarea name="address"></textarea></label>
+          <label>Footer Content<textarea name="footerContent"></textarea></label>
+          <button class="btn btn-primary" type="submit">Save Settings</button>
+        </form>
+      </section>
+
+      <section class="admin-section" data-panel="users">
+        <div class="admin-card"><h2>Users</h2><div class="table-wrap"><table><thead><tr><th>Name</th><th>Username</th><th>Role</th></tr></thead><tbody data-users-table></tbody></table></div></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

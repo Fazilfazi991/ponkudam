@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diamond | Ponkudam Gold & Diamonds</title>
+  <meta name="description" content="Explore Ponkudam diamond bangles, bracelets, and pendants with individual product pages and prices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-category="diamond">
+  <header class="site-header">
+    <div class="gold-rate-marquee" data-gold-rate-marquee>
+      <div class="gold-rate-track">
+        <span data-gold-rate-text>Gold rate updating soon.</span>
+        <span data-gold-rate-text aria-hidden="true">Gold rate updating soon.</span>
+      </div>
+    </div>
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/#home" aria-label="Ponkudam Gold and Diamonds home">
+        <img class="brand-logo-image" src="images/ponkudam_2003_logo_transparent.png" alt="Ponkudam Gold & Diamonds" decoding="async" fetchpriority="high">
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+        <i data-lucide="menu" aria-hidden="true"></i>
+      </button>
+      <div class="nav-menu" id="primary-menu">
+        <a href="/#home">Home</a>
+        <a href="/#about">About Us</a>
+        <a class="active" href="/#collections">Collections</a>
+        <a href="/#services">Services</a>
+        <a href="/#why-us">Why Us</a>
+        <a href="/#stores">Stores</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-icons" aria-label="Store actions">
+        <a href="#search" aria-label="Search"><i data-lucide="search"></i></a>
+        <a href="#wishlist" aria-label="Wishlist"><i data-lucide="heart"></i></a>
+        <a href="#account" aria-label="Account"><i data-lucide="user"></i></a>
+        <a href="#cart" aria-label="Shopping bag"><i data-lucide="shopping-bag"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="category-main">
+    <section class="category-hero">
+      <div class="category-hero-copy">
+        <p class="eyebrow" data-category-eyebrow></p>
+        <h1 data-category-title></h1>
+        <p data-category-copy></p>
+      </div>
+      <div class="category-hero-image">
+        <img data-category-hero-image src="" alt="" decoding="async" fetchpriority="high">
+      </div>
+    </section>
+
+    <nav class="category-tabs" aria-label="Collection categories">
+      <a href="/diamond">Diamond</a>
+      <a href="/bangles">Bangles</a>
+      <a href="/earrings">Earrings</a>
+      <a href="/necklaces">Necklaces</a>
+      <a href="/pendants">Pendants</a>
+    </nav>
+
+    <section class="section category-section">
+      <div class="section-head">
+        <h2>Bangles, Bracelets & Pendants</h2>
+        <a href="/#collections">Back to Collections <i data-lucide="chevron-right"></i></a>
+      </div>
+      <div class="diamond-filter-row" aria-label="Diamond product types">
+        <span>Bangles</span>
+        <span>Bracelets</span>
+        <span>Pendants</span>
+      </div>
+      <div class="product-grid category-products" data-category-grid></div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand footer-logo" href="/#home">
+          <img class="brand-logo-image" src="images/ponkudam_2003_logo_transparent.png" alt="Ponkudam Gold & Diamonds" loading="lazy" decoding="async">
+        </a>
+        <p>Timeless jewellery created with love, purity and craftsmanship for every celebration.</p>
+      </div>
+      <div>
+        <h3>Collections</h3>
+        <a href="/diamond">Diamond</a>
+        <a href="/bangles">Bangles</a>
+        <a href="/earrings">Earrings</a>
+        <a href="/necklaces">Necklaces</a>
+        <a href="/pendants">Pendants</a>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <a href="/#home">Home</a>
+        <a href="/#collections">Collections</a>
+        <a href="/#services">Services</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <h3>Contact Us</h3>
+        <p><i data-lucide="map-pin"></i> 123, Heritage Road,<br>Coimbatore - 641 002.</p>
+        <p><i data-lucide="phone"></i> +91 98765 43210</p>
+        <p><i data-lucide="mail"></i> hello@ponkudam.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Ponkudam Gold & Diamonds. All Rights Reserved.</p>
+      <p><a href="/#home">Home</a> | <a href="/#collections">Collections</a></p>
+    </div>
+    <a class="back-top" href="#" aria-label="Back to top"><i data-lucide="arrow-up"></i></a>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="products.js"></script>
+  <script src="diamond-products.js"></script>
+  <script src="category.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

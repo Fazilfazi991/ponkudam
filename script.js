@@ -72,6 +72,8 @@ const setGoldRateText = (html) => {
   });
 };
 
+const normalizeCurrencyText = (text) => String(text || "").replace(/\?(\d)/g, "₹$1");
+
 const loadGoldRateMarquee = async () => {
   if (!goldRateTexts.length) return;
 
@@ -87,9 +89,13 @@ const loadGoldRateMarquee = async () => {
     }
 
     const updated = formatGoldRateTime(data.lastUpdated);
-    setGoldRateText(
-      `&#10024; <strong>Gold Rate India:</strong> 24K ₹${data.display.rate24K}/gm | 22K ₹${data.display.rate22K}/gm | 18K ₹${data.display.rate18K}/gm &#10024; <small>${updated ? `Updated ${updated}` : ""}</small>`
-    );
+    if (data.display.englishMessage || data.display.malayalamMessage) {
+      setGoldRateText(`&#10024; <strong>Gold Rate:</strong> ${normalizeCurrencyText(data.display.englishMessage || data.display.malayalamMessage)} &#10024;`);
+    } else {
+      setGoldRateText(
+        `&#10024; <strong>Gold Rate India:</strong> 24K ₹${data.display.rate24K}/gm | 22K ₹${data.display.rate22K}/gm | ${data.display.rate22K8g ? `22K 8g ₹${data.display.rate22K8g} | ` : ""}18K ₹${data.display.rate18K}/gm &#10024; <small>${updated ? `Updated ${updated}` : ""}</small>`
+      );
+    }
   } catch {
     setGoldRateText("&#10024; <strong>Gold Rate India:</strong> Gold rate updating soon. &#10024;");
   }

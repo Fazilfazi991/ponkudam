@@ -4,40 +4,35 @@ const categoryData = {
     eyebrow: "Ponkudam Collections",
     copy: "Explore handcrafted bangles with traditional detail, polished finishes, and timeless celebration-ready design.",
     heroImage: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_24_58%20AM%20(4).webp",
-    products: Array.from({ length: 8 }, (_, index) => ({
-      name: `Heritage Gold Bangle ${String(index + 1).padStart(2, "0")}`,
-      image: `images/bangles/webp/ponkudam_featured_product_${String(index + 1).padStart(2, "0")}_800x1000.webp`,
-    })),
+    products: window.standardProducts?.bangles || [],
   },
   earrings: {
     title: "Earrings",
     eyebrow: "Ponkudam Collections",
     copy: "Discover statement earrings and graceful daily-wear styles crafted to frame every moment beautifully.",
     heroImage: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_24_58%20AM%20(3).webp",
-    products: Array.from({ length: 8 }, (_, index) => ({
-      name: `Diamond Drop Earrings ${String(index + 1).padStart(2, "0")}`,
-      image: `images/earings/webp/ponkudam_pdf2_product_${String(index + 1).padStart(2, "0")}_800x1000.webp`,
-    })),
+    products: window.standardProducts?.earrings || [],
   },
   necklaces: {
     title: "Necklaces",
     eyebrow: "Ponkudam Collections",
     copy: "A curated showcase of necklace designs for weddings, milestones, and refined everyday elegance.",
     heroImage: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_24_57%20AM%20(2).webp",
-    products: Array.from({ length: 11 }, (_, index) => ({
-      name: `Signature Necklace ${String(index + 1).padStart(2, "0")}`,
-      image: `images/necklaces/webp/ponkudam_pdf3_product_${String(index + 1).padStart(2, "0")}_800x1000.webp`,
-    })),
+    products: window.standardProducts?.necklaces || [],
   },
   pendants: {
     title: "Pendants",
     eyebrow: "Ponkudam Collections",
     copy: "Elegant pendant sets and refined pieces designed for gifting, occasions, and signature styling.",
     heroImage: "images/ChatGPT%20Image%20Jun%2014,%202026,%2006_33_10%20AM%20(5).webp",
-    products: Array.from({ length: 5 }, (_, index) => ({
-      name: `Diamond Pendant ${String(index + 1).padStart(2, "0")}`,
-      image: `images/pendants/webp/ponkudam_pdf4_product_${String(index + 1).padStart(2, "0")}_800x1000.webp`,
-    })),
+    products: window.standardProducts?.pendants || [],
+  },
+  diamond: {
+    title: "Diamond",
+    eyebrow: "Diamond Collection",
+    copy: "Explore diamond bangles, bracelets, and pendants with individual product pages and clear pricing.",
+    heroImage: "images/bangles/Diamond/bangle-47900/bangle-47900/bangle-47900-07-wearing-shot.png",
+    products: window.diamondProducts || [],
   },
 };
 
@@ -55,17 +50,39 @@ if (data) {
   heroImage.alt = `${data.title} collection`;
 
   const grid = document.querySelector("[data-category-grid]");
-  grid.innerHTML = data.products
-    .map(
-      (product) => `
-        <article class="product-card category-product-card">
-          <button class="heart" type="button" aria-label="Add ${product.name} to wishlist"><i data-lucide="heart"></i></button>
-          <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">
-          <h3>${product.name}</h3>
-        </article>
-      `
-    )
-    .join("");
+  const renderProducts = (products) => {
+    grid.innerHTML = products
+      .map((product) => {
+        const productUrl = product.id ? `product.html?id=${encodeURIComponent(product.id)}` : "";
+        const title = product.type ? `${product.type} / ${product.name}` : product.name;
+        const image = product.featuredImage || product.image;
+        const price = `<p>${window.formatProductPrice(product)}</p>`;
+        const wishIcon = productUrl
+          ? `<span class="heart" aria-hidden="true"><i data-lucide="heart"></i></span>`
+          : `<button class="heart" type="button" aria-label="Add ${product.name} to wishlist"><i data-lucide="heart"></i></button>`;
+        const cardContent = `
+          ${wishIcon}
+          <img src="${image}" alt="${product.name}" loading="lazy" decoding="async">
+          <h3>${title}</h3>
+          ${price}
+        `;
+
+        return productUrl
+          ? `<a class="product-card category-product-card" href="${productUrl}">${cardContent}</a>`
+          : `<article class="product-card category-product-card">${cardContent}</article>`;
+      })
+      .join("");
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  renderProducts(data.products);
+
+  fetch(`/api/public-products?category=${encodeURIComponent(currentCategory)}`)
+    .then((response) => (response.ok ? response.json() : null))
+    .then((payload) => {
+      if (payload?.ok && payload.products?.length) renderProducts(payload.products);
+    })
+    .catch(() => {});
 
   document.querySelectorAll(".category-tabs a").forEach((link) => {
     const href = link.getAttribute("href");
