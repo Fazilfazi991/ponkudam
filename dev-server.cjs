@@ -6,6 +6,7 @@ const root = __dirname;
 const port = Number(process.env.PORT || 8000);
 const dbFile = path.join(root, "data", "db.json");
 const uploadDir = path.join(root, "images", "uploads");
+const apiHandler = require(path.join(root, "api", "[...path].js"));
 const types = {
   ".css": "text/css",
   ".html": "text/html",
@@ -316,11 +317,12 @@ http
   .createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host || "127.0.0.1"}`);
     if (url.pathname.startsWith("/api/")) {
-      try {
-        await handleApi(req, res, url);
-      } catch (error) {
-        sendJson(res, 500, { ok: false, message: error.message });
-      }
+      res.status = (statusCode) => {
+        res.statusCode = statusCode;
+        return res;
+      };
+      res.json = (payload) => sendJson(res, res.statusCode || 200, payload);
+      await apiHandler(req, res);
       return;
     }
 

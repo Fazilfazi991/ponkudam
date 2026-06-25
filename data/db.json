@@ -4,21 +4,21 @@
       "id": "user-super-admin",
       "name": "Super Admin",
       "username": "admin",
-      "password": "admin123",
+      "password_hash": "pbkdf2_sha256$120000$211fee51484e6f6de3d32f79fbb5b123$e92bf34ef1b44c1a2accc7f766f7a243555360da99fb36d510d97a2d692fa832",
       "role": "Super Admin"
     },
     {
       "id": "user-products",
       "name": "Product Manager",
       "username": "products",
-      "password": "products123",
+      "password_hash": "pbkdf2_sha256$120000$e1126cb6f286513792b20aa11b591c66$eda2825cf08b1d56813590a0334ec14b8076f192e643b6936b6ca891e99fba5f",
       "role": "Product Manager"
     },
     {
       "id": "user-content",
       "name": "Content Manager",
       "username": "content",
-      "password": "content123",
+      "password_hash": "pbkdf2_sha256$120000$9428a42b4e3de7fa5337cda05f50f83e$922845e0c40f453846d844ce56311160dd4f1481c71e1e5f586a69eb7824484d",
       "role": "Content Manager"
     }
   ],

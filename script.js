@@ -32,6 +32,28 @@ const setGoldRateText = (html) => {
 
 setGoldRateText(manualGoldRateHtml);
 
+const loadGoldRateMarquee = async () => {
+  if (!goldRateTexts.length) return;
+  try {
+    const response = await fetch("/api/gold-rate");
+    const payload = response.ok ? await response.json() : null;
+    if (!payload?.ok || !payload.display) return;
+
+    if (payload.display.englishMessage || payload.display.malayalamMessage) {
+      setGoldRateText(`&#10024; <strong>Gold Rate:</strong> ${payload.display.englishMessage || payload.display.malayalamMessage} &#10024;`);
+      return;
+    }
+
+    setGoldRateText(
+      `&#10024; <strong>Gold Rate India:</strong> 24K &#8377;${payload.display.rate24K}/gm | 22K &#8377;${payload.display.rate22K}/gm | 22K 8g &#8377;${payload.display.rate22K8g}/gm | 18K &#8377;${payload.display.rate18K}/gm &#10024;`
+    );
+  } catch {
+    setGoldRateText(manualGoldRateHtml);
+  }
+};
+
+loadGoldRateMarquee();
+
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const revealTargets = [
   ".trust-item",

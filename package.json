@@ -1,0 +1,12 @@
+{
+  "name": "ponkudam",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node dev-server.cjs",
+    "migrate:supabase": "node scripts/migrate-db-json-to-supabase.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}

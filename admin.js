@@ -44,6 +44,18 @@ const showApp = () => {
   $("[data-login-view]").classList.add("hidden");
   $("[data-admin-view]").classList.remove("hidden");
   $("[data-role-label]").textContent = state.user ? `${state.user.name} / ${state.user.role}` : "";
+  const allowed =
+    state.user?.role === "Super Admin"
+      ? ["dashboard", "products", "categories", "gold", "enquiries", "settings", "users"]
+      : state.user?.role === "Product Manager"
+        ? ["dashboard", "products", "categories"]
+        : ["dashboard", "enquiries", "settings"];
+  $$("[data-admin-nav] [data-section]").forEach((button) => {
+    button.hidden = !allowed.includes(button.dataset.section);
+  });
+  $$(".admin-section").forEach((panel) => {
+    if (!allowed.includes(panel.dataset.panel)) panel.classList.remove("active");
+  });
 };
 
 const showLogin = () => {
@@ -52,20 +64,26 @@ const showLogin = () => {
 };
 
 const loadAll = async () => {
-  const [products, categories, enquiries, users, goldRates, settings] = await Promise.all([
-    api("products"),
-    api("categories"),
-    api("enquiries"),
-    api("users"),
-    api("gold-rates"),
-    api("settings"),
-  ]);
-  state.products = products.products;
-  state.categories = categories.categories;
-  state.enquiries = enquiries.enquiries;
-  state.users = users.users;
-  state.goldRates = goldRates.gold_rates;
-  state.settings = settings.settings;
+  const isSuperAdmin = state.user?.role === "Super Admin";
+  const isProductManager = state.user?.role === "Product Manager";
+  const isContentManager = state.user?.role === "Content Manager";
+
+  const requests = {
+    products: isSuperAdmin || isProductManager ? api("products") : Promise.resolve({ products: [] }),
+    categories: isSuperAdmin || isProductManager ? api("categories") : Promise.resolve({ categories: [] }),
+    enquiries: isSuperAdmin || isContentManager ? api("enquiries") : Promise.resolve({ enquiries: [] }),
+    users: isSuperAdmin ? api("users") : Promise.resolve({ users: [] }),
+    goldRates: isSuperAdmin ? api("gold-rates") : Promise.resolve({ gold_rates: [] }),
+    settings: isSuperAdmin || isContentManager ? api("settings") : Promise.resolve({ settings: {} }),
+  };
+
+  const [products, categories, enquiries, users, goldRates, settings] = await Promise.all(Object.values(requests));
+  state.products = products.products || [];
+  state.categories = categories.categories || [];
+  state.enquiries = enquiries.enquiries || [];
+  state.users = users.users || [];
+  state.goldRates = goldRates.gold_rates || [];
+  state.settings = settings.settings || {};
   renderAll();
 };
 
@@ -190,13 +208,13 @@ const renderImagePreviews = () => {
     .join("");
 };
 
-const uploadFile = async (file) => {
+const uploadFile = async (file, bucket = "product-images") => {
   const dataUrl = await new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
     reader.readAsDataURL(file);
   });
-  const result = await api("uploads", { method: "POST", body: JSON.stringify({ name: file.name, dataUrl }) });
+  const result = await api("uploads", { method: "POST", body: JSON.stringify({ name: file.name, dataUrl, bucket }) });
   return result.url;
 };
 
@@ -393,14 +411,14 @@ document.addEventListener("input", (event) => {
 
 $("[data-featured-upload]").addEventListener("change", async (event) => {
   if (!event.target.files[0]) return;
-  const url = await uploadFile(event.target.files[0]);
+  const url = await uploadFile(event.target.files[0], "product-images");
   $("[data-product-form]").elements.featuredImage.value = url;
   renderImagePreviews();
 });
 
 $("[data-gallery-upload]").addEventListener("change", async (event) => {
   const urls = [];
-  for (const file of event.target.files) urls.push(await uploadFile(file));
+  for (const file of event.target.files) urls.push(await uploadFile(file, "product-images"));
   state.editingProduct = { ...(state.editingProduct || {}), galleryImages: urls };
   renderImagePreviews();
 });
