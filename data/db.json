@@ -1326,16 +1326,5 @@
     "openingHours": "10:00 AM - 8:00 PM Everyday"
   },
   "enquiries": [],
-  "tokens": [
-    {
-      "token": "dXNlci1zdXBlci1hZG1pbjoxNzgyMzk0ODY5MjAzOjAuNjU3NjU0NTEzNzc1NjQwOQ",
-      "userId": "user-super-admin",
-      "createdAt": "2026-06-25T13:41:09.203Z"
-    },
-    {
-      "token": "dXNlci1zdXBlci1hZG1pbjoxNzgyMzk1Mjk3Mjg0OjAuMTk5ODYwMTU1MDE0MzI4OTc",
-      "userId": "user-super-admin",
-      "createdAt": "2026-06-25T13:48:17.284Z"
-    }
-  ]
+  "tokens": []
 }
