@@ -31,7 +31,7 @@ const categoryData = {
     title: "Diamond",
     eyebrow: "Diamond Collection",
     copy: "Explore diamond bangles, bracelets, and pendants with individual product pages and clear pricing.",
-    heroImage: "images/bangles/Diamond/bangle-47900/bangle-47900/bangle-47900-07-wearing-shot.png",
+    heroImage: "images/bangles/Diamond/bangle-47900/bangle-47900/bangle-47900-07-wearing-shot.webp",
     products: window.diamondProducts || [],
   },
 };

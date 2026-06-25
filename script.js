@@ -3,6 +3,8 @@ const navMenu = document.querySelector(".nav-menu");
 const desktopSlider = document.querySelector(".desktop-hero-slider");
 const mobileSlider = document.querySelector(".mobile-hero-slider");
 const goldRateTexts = [...document.querySelectorAll("[data-gold-rate-text]")];
+const manualGoldRateHtml =
+  "&#10024; <strong>Gold Rate India:</strong> 24K &#8377;14,002/gm | 22K &#8377;13,666/gm | 22K 8g &#8377;1,09,328 | 18K &#8377;11,342/gm &#10024; <small>Updated Jun 25, 2026</small>";
 
 if (window.lucide) {
   window.lucide.createIcons();
@@ -22,86 +24,13 @@ navMenu?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-const formatGoldRateTime = (timestamp) => {
-  if (!timestamp) return "";
-
-  const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) return "";
-
-  const nowParts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Kolkata",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(new Date());
-  const dateParts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Kolkata",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(date);
-
-  const toKey = (parts) =>
-    parts
-      .filter((part) => ["year", "month", "day"].includes(part.type))
-      .map((part) => part.value)
-      .join("-");
-  const dayLabel =
-    toKey(nowParts) === toKey(dateParts)
-      ? "Today"
-      : new Intl.DateTimeFormat("en-IN", {
-          timeZone: "Asia/Kolkata",
-          day: "numeric",
-          month: "short",
-        }).format(date);
-  const time = new Intl.DateTimeFormat("en-IN", {
-    timeZone: "Asia/Kolkata",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  })
-    .format(date)
-    .toUpperCase();
-
-  return `${dayLabel} at ${time} IST`;
-};
-
 const setGoldRateText = (html) => {
   goldRateTexts.forEach((element) => {
     element.innerHTML = html;
   });
 };
 
-const normalizeCurrencyText = (text) => String(text || "").replace(/\?(\d)/g, "₹$1");
-
-const loadGoldRateMarquee = async () => {
-  if (!goldRateTexts.length) return;
-
-  try {
-    const response = await fetch("/api/gold-rate", {
-      headers: { Accept: "application/json" },
-    });
-    const data = await response.json();
-
-    if (!data?.ok || !data.display) {
-      setGoldRateText("&#10024; <strong>Gold Rate India:</strong> Gold rate updating soon. &#10024;");
-      return;
-    }
-
-    const updated = formatGoldRateTime(data.lastUpdated);
-    if (data.display.englishMessage || data.display.malayalamMessage) {
-      setGoldRateText(`&#10024; <strong>Gold Rate:</strong> ${normalizeCurrencyText(data.display.englishMessage || data.display.malayalamMessage)} &#10024;`);
-    } else {
-      setGoldRateText(
-        `&#10024; <strong>Gold Rate India:</strong> 24K ₹${data.display.rate24K}/gm | 22K ₹${data.display.rate22K}/gm | ${data.display.rate22K8g ? `22K 8g ₹${data.display.rate22K8g} | ` : ""}18K ₹${data.display.rate18K}/gm &#10024; <small>${updated ? `Updated ${updated}` : ""}</small>`
-      );
-    }
-  } catch {
-    setGoldRateText("&#10024; <strong>Gold Rate India:</strong> Gold rate updating soon. &#10024;");
-  }
-};
-
-loadGoldRateMarquee();
+setGoldRateText(manualGoldRateHtml);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const revealTargets = [
