@@ -26,6 +26,14 @@ npm install
 npm run migrate:supabase
 ```
 
+To import all existing website products, including static diamond product data and local product images:
+
+```bash
+npm run import:products
+```
+
+The importer scans `data/db.json`, `products.js`, `diamond-products.js`, and local image folders, uploads product images to the `product-images` bucket, then upserts categories and products.
+
 7. Start locally:
 
 ```bash

@@ -471,7 +471,14 @@ module.exports = async function handler(req, res) {
 
     if (resource === "products" && id && req.method === "GET") {
       const { byId } = await getSupabaseCategories();
-      const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+      const cleanCode = String(id).toUpperCase().replace(/[^A-Z0-9]+/g, "-");
+      const filters = [`slug.eq.${id}`, `product_code.eq.${cleanCode}`];
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) filters.unshift(`id.eq.${id}`);
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .or(filters.join(","))
+        .maybeSingle();
       if (error) throw error;
       return data ? sendJson(res, 200, { ok: true, product: mapProduct(data, byId) }) : sendJson(res, 404, { ok: false, message: "Product not found" });
     }

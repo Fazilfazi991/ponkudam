@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node dev-server.cjs",
-    "migrate:supabase": "node scripts/migrate-db-json-to-supabase.js"
+    "migrate:supabase": "node scripts/migrate-db-json-to-supabase.js",
+    "import:products": "node scripts/import-existing-products-to-supabase.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4"
