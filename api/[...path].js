@@ -2,7 +2,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { createAdminSupabaseClient } = require("../lib/supabase.cjs");
+const { createClient } = require("@supabase/supabase-js");
 
 const bundledDbFile = path.join(process.cwd(), "data", "db.json");
 const runtimeDbFile = path.join(os.tmpdir(), "ponkudam-db.json");
@@ -12,9 +12,26 @@ const hasSupabase = Boolean(serviceUrl && serviceRoleKey);
 const tokenSecret = process.env.ADMIN_TOKEN_SECRET || serviceRoleKey || "ponkudam-local-dev-secret";
 
 const nowIso = () => new Date().toISOString();
-const supabase = createAdminSupabaseClient();
+let supabaseClient;
 
-const sendJson = (res, status, payload) => res.status(status).json(payload);
+const getSupabase = () => {
+  if (!hasSupabase) return null;
+  if (!supabaseClient) {
+    supabaseClient = createClient(serviceUrl, serviceRoleKey, {
+      auth: { persistSession: false },
+    });
+  }
+  return supabaseClient;
+};
+
+const sendJson = (res, status, payload) => {
+  if (typeof res.status === "function" && typeof res.json === "function") {
+    return res.status(status).json(payload);
+  }
+  res.statusCode = status;
+  res.setHeader?.("Content-Type", "application/json");
+  return res.end(JSON.stringify(payload));
+};
 
 const readBody = (req) =>
   new Promise((resolve, reject) => {
@@ -285,6 +302,7 @@ const canAccess = (user, resource) => {
 };
 
 const getSupabaseCategories = async () => {
+  const supabase = getSupabase();
   const { data, error } = await supabase.from("categories").select("*").order("sort_order", { ascending: true });
   if (error) throw error;
   const byId = Object.fromEntries((data || []).map((row) => [row.id, row]));
@@ -302,6 +320,7 @@ const getAuthUser = async (req) => {
     return user ? mapUser(user) : null;
   }
 
+  const supabase = getSupabase();
   const { data, error } = await supabase.from("users").select("id, username, role, is_active").eq("id", payload.sub).maybeSingle();
   if (error || !data || data.is_active === false) return null;
   return mapUser(data);
@@ -430,6 +449,7 @@ module.exports = async function handler(req, res) {
     const id = parts[2];
 
     if (!hasSupabase) return handleJsonFallback(req, res, resource, id, url);
+    const supabase = getSupabase();
 
     if (resource === "login" && req.method === "POST") {
       const body = await readBody(req);
