@@ -7,7 +7,10 @@ const { createClient } = require("@supabase/supabase-js");
 const bundledDbFile = path.join(process.cwd(), "data", "db.json");
 const runtimeDbFile = path.join(os.tmpdir(), "ponkudam-db.json");
 const normalizeSupabaseUrl = (value) => {
-  const raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  let raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  raw = raw.replace(/^SUPABASE_URL\s*=\s*/i, "").trim();
+  const urlMatch = raw.match(/https?:\/\/[^\s"']+|[a-z0-9-]+\.supabase\.co/i);
+  if (urlMatch) raw = urlMatch[0];
   if (!raw) return "";
   const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
   try {
@@ -19,7 +22,10 @@ const normalizeSupabaseUrl = (value) => {
 };
 
 const normalizeSecret = (value) => {
-  const raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  let raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  raw = raw.replace(/^SUPABASE_(SERVICE_ROLE_KEY|ANON_KEY)\s*=\s*/i, "").trim();
+  const jwtMatch = raw.match(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/);
+  if (jwtMatch) raw = jwtMatch[0];
   return raw && !raw.includes("paste_your") ? raw : "";
 };
 
