@@ -302,6 +302,7 @@ document.addEventListener("submit", async (event) => {
       await api("gold-rates", { method: "POST", body: JSON.stringify(formToObject(event.target)) });
       await loadAll();
       toast("Gold rate updated");
+      alert("Gold rate updated successfully.");
     }
 
     if (event.target.matches("[data-settings-form]")) {
