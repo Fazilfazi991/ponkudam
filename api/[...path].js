@@ -6,8 +6,25 @@ const { createClient } = require("@supabase/supabase-js");
 
 const bundledDbFile = path.join(process.cwd(), "data", "db.json");
 const runtimeDbFile = path.join(os.tmpdir(), "ponkudam-db.json");
-const serviceUrl = process.env.SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const normalizeSupabaseUrl = (value) => {
+  const raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  if (!raw) return "";
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    const url = new URL(withProtocol);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString().replace(/\/$/, "") : "";
+  } catch {
+    return "";
+  }
+};
+
+const normalizeSecret = (value) => {
+  const raw = String(value || "").trim().replace(/^["']|["']$/g, "");
+  return raw && !raw.includes("paste_your") ? raw : "";
+};
+
+const serviceUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL);
+const serviceRoleKey = normalizeSecret(process.env.SUPABASE_SERVICE_ROLE_KEY);
 const hasSupabase = Boolean(serviceUrl && serviceRoleKey);
 const tokenSecret = process.env.ADMIN_TOKEN_SECRET || serviceRoleKey || "ponkudam-local-dev-secret";
 
