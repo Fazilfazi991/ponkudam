@@ -2,7 +2,6 @@ const crypto = require("crypto");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { createClient } = require("@supabase/supabase-js");
 
 const bundledDbFile = path.join(process.cwd(), "data", "db.json");
 const runtimeDbFile = path.join(os.tmpdir(), "ponkudam-db.json");
@@ -40,6 +39,7 @@ let supabaseClient;
 const getSupabase = () => {
   if (!hasSupabase) return null;
   if (!supabaseClient) {
+    const { createClient } = require("@supabase/supabase-js");
     supabaseClient = createClient(serviceUrl, serviceRoleKey, {
       auth: { persistSession: false },
     });
