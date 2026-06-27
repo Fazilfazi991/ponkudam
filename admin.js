@@ -37,8 +37,47 @@ const toast = (message) => {
   setTimeout(() => element.classList.remove("show"), 2400);
 };
 
+const confirmDialog = ({ title = "Confirm Action", message = "Are you sure?", confirmText = "Confirm" } = {}) =>
+  new Promise((resolve) => {
+    const modal = $("[data-confirm-modal]");
+    const accept = $("[data-confirm-accept]");
+    const cancel = $("[data-confirm-cancel]");
+    $("[data-confirm-title]").textContent = title;
+    $("[data-confirm-message]").textContent = message;
+    accept.textContent = confirmText;
+    modal.classList.remove("hidden");
+
+    const close = (value) => {
+      modal.classList.add("hidden");
+      accept.onclick = null;
+      cancel.onclick = null;
+      resolve(value);
+    };
+
+    accept.onclick = () => close(true);
+    cancel.onclick = () => close(false);
+  });
+
 const asPrice = (value) =>
   value ? new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value) : "Contact";
+
+const escapeHtml = (value = "") =>
+  String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+
+const pageHelpers = {
+  dashboard: "Monitor products, enquiries, gold rates, and store activity.",
+  products: "Manage jewellery products, pricing, stock, and visibility.",
+  categories: "Organize product categories and website collections.",
+  gold: "Update manual gold and silver rates shown on the website.",
+  enquiries: "Track customer product enquiries and WhatsApp follow-ups.",
+  settings: "Manage public store contact details and footer content.",
+  users: "Review admin users and their access roles.",
+};
+
+const categoryLabel = (slug) => state.categories.find((category) => category.slug === slug)?.name || slug || "-";
+const productImage = (item) => item.featuredImage || item.image || item.galleryImages?.[0] || "";
+const productSubline = (item) => item.slug || item.code || "No slug";
+const statusClass = (value = "") => value.toLowerCase().replace(/\s+/g, "-");
 
 const showApp = () => {
   $("[data-login-view]").classList.add("hidden");
@@ -151,22 +190,75 @@ const renderProducts = () => {
   const totalPages = Math.max(1, Math.ceil(products.length / pageSize));
   state.productPage = Math.min(state.productPage, totalPages);
   const pageItems = products.slice((state.productPage - 1) * pageSize, state.productPage * pageSize);
+  const showingStart = products.length ? (state.productPage - 1) * pageSize + 1 : 0;
+  const showingEnd = Math.min(state.productPage * pageSize, products.length);
+  const countText = products.length === state.products.length
+    ? `Showing ${showingStart}-${showingEnd} of ${state.products.length} products`
+    : `Showing ${showingStart}-${showingEnd} of ${products.length} matching products (${state.products.length} total)`;
+  $("[data-product-count]").textContent = countText;
+  $("[data-products-empty]").classList.toggle("hidden", products.length > 0);
   $("[data-products-table]").innerHTML = pageItems
     .map(
       (item) => `<tr>
-        <td>${item.name}</td><td>${item.code || ""}</td><td>${item.category || ""}</td><td>${asPrice(item.offerPrice || item.price)}</td>
-        <td><span class="status ${item.stockStatus === "In Stock" ? "good" : "warn"}">${item.stockStatus}</span></td><td>${item.status}</td>
-        <td><div class="row-actions">
-          <button class="mini-btn" data-view-product="${item.id}">View</button>
-          <button class="mini-btn" data-edit-product="${item.id}">Edit</button>
-          <button class="mini-btn" data-duplicate-product="${item.id}">Duplicate</button>
-          <button class="mini-btn" data-toggle-product="${item.id}">${item.status === "Published" ? "Unpublish" : "Publish"}</button>
-          <button class="mini-btn" data-delete-product="${item.id}">Delete</button>
-        </div></td>
+        <td>
+          <div class="product-cell">
+            ${productImage(item) ? `<img src="${escapeHtml(productImage(item))}" alt="">` : `<span class="product-thumb-placeholder">PK</span>`}
+            <div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(productSubline(item))}</small></div>
+          </div>
+        </td>
+        <td>${escapeHtml(item.code || "")}</td>
+        <td>${escapeHtml(categoryLabel(item.category))}</td>
+        <td class="price-cell">${asPrice(item.offerPrice || item.price)}</td>
+        <td><span class="status stock-${statusClass(item.stockStatus)}">${escapeHtml(item.stockStatus || "In Stock")}</span></td>
+        <td><span class="status publish-${statusClass(item.status)}">${escapeHtml(item.status || "Draft")}</span></td>
+        <td>
+          <div class="product-actions">
+            <button class="mini-btn action-primary" data-edit-product="${item.id}" type="button">Edit</button>
+            <details class="action-menu">
+              <summary aria-label="More actions">...</summary>
+              <div>
+                <button type="button" data-view-product="${item.id}">View</button>
+                <button type="button" data-duplicate-product="${item.id}">Duplicate</button>
+                <button type="button" data-toggle-product="${item.id}">${item.status === "Published" ? "Unpublish" : "Publish"}</button>
+                <button class="danger" type="button" data-delete-product="${item.id}">Delete</button>
+              </div>
+            </details>
+          </div>
+        </td>
       </tr>`
     )
     .join("");
-  $("[data-product-pagination]").innerHTML = `<button class="mini-btn" data-page-prev>Prev</button><span>${state.productPage} / ${totalPages}</span><button class="mini-btn" data-page-next>Next</button>`;
+  $("[data-products-mobile]").innerHTML = pageItems
+    .map(
+      (item) => `<article class="product-mobile-card">
+        <div class="product-mobile-top">
+          ${productImage(item) ? `<img src="${escapeHtml(productImage(item))}" alt="">` : `<span class="product-thumb-placeholder">PK</span>`}
+          <div><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.code || productSubline(item))}</p></div>
+        </div>
+        <dl>
+          <div><dt>Category</dt><dd>${escapeHtml(categoryLabel(item.category))}</dd></div>
+          <div><dt>Price</dt><dd>${asPrice(item.offerPrice || item.price)}</dd></div>
+        </dl>
+        <div class="mobile-badges">
+          <span class="status stock-${statusClass(item.stockStatus)}">${escapeHtml(item.stockStatus || "In Stock")}</span>
+          <span class="status publish-${statusClass(item.status)}">${escapeHtml(item.status || "Draft")}</span>
+        </div>
+        <div class="product-actions">
+          <button class="mini-btn action-primary" data-edit-product="${item.id}" type="button">Edit</button>
+          <details class="action-menu">
+            <summary aria-label="More actions">...</summary>
+            <div>
+              <button type="button" data-view-product="${item.id}">View</button>
+              <button type="button" data-duplicate-product="${item.id}">Duplicate</button>
+              <button type="button" data-toggle-product="${item.id}">${item.status === "Published" ? "Unpublish" : "Publish"}</button>
+              <button class="danger" type="button" data-delete-product="${item.id}">Delete</button>
+            </div>
+          </details>
+        </div>
+      </article>`
+    )
+    .join("");
+  $("[data-product-pagination]").innerHTML = `<button class="mini-btn" data-page-prev type="button" ${state.productPage === 1 ? "disabled" : ""}>Previous</button><span>Page ${state.productPage} of ${totalPages}</span><button class="mini-btn" data-page-next type="button" ${state.productPage === totalPages ? "disabled" : ""}>Next</button>`;
 };
 
 const objectToForm = (form, item) => {
@@ -191,12 +283,22 @@ const formToObject = (form) => {
 const openProductForm = (product = null) => {
   state.editingProduct = product;
   const form = $("[data-product-form]");
+  $("[data-products-list]").classList.add("hidden");
   form.classList.remove("hidden");
   form.reset();
   form.elements.visible.checked = true;
   form.elements.priceMode.value = "show";
   $("[data-product-form-title]").textContent = product ? "Edit Product" : "Add Product";
+  $("[data-product-form-eyebrow]").textContent = product ? "Update Product" : "New Product";
   if (product) objectToForm(form, { ...product, featuredImage: product.featuredImage || product.image });
+  renderImagePreviews();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const closeProductForm = () => {
+  state.editingProduct = null;
+  $("[data-product-form]").classList.add("hidden");
+  $("[data-products-list]").classList.remove("hidden");
   renderImagePreviews();
 };
 
@@ -280,12 +382,13 @@ document.addEventListener("submit", async (event) => {
 
     if (event.target.matches("[data-product-form]")) {
       const payload = formToObject(event.target);
+      if (event.submitter?.dataset.saveDraft !== undefined) payload.status = "Draft";
       payload.galleryImages = state.editingProduct?.galleryImages?.length ? state.editingProduct.galleryImages : [payload.featuredImage];
       const id = state.editingProduct?.id;
       await api(id ? `products/${id}` : "products", { method: id ? "PUT" : "POST", body: JSON.stringify({ ...state.editingProduct, ...payload, id: id || `product-${Date.now()}` }) });
-      event.target.classList.add("hidden");
+      closeProductForm();
       await loadAll();
-      toast("Product saved");
+      toast(id ? "Product updated" : "Product saved");
     }
 
     if (event.target.matches("[data-category-form]")) {
@@ -323,6 +426,8 @@ document.addEventListener("click", async (event) => {
       $$("[data-admin-nav] button").forEach((button) => button.classList.toggle("active", button === target));
       $$(".admin-section").forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === target.dataset.section));
       $("[data-page-title]").textContent = target.textContent;
+      $("[data-page-helper]").textContent = pageHelpers[target.dataset.section] || "";
+      if (target.dataset.section === "products") closeProductForm();
     }
     if (target.dataset.logout !== undefined) {
       await api("logout", { method: "POST", body: "{}" });
@@ -330,7 +435,7 @@ document.addEventListener("click", async (event) => {
       showLogin();
     }
     if (target.dataset.newProduct !== undefined) openProductForm();
-    if (target.dataset.cancelProduct !== undefined) $("[data-product-form]").classList.add("hidden");
+    if (target.dataset.cancelProduct !== undefined) closeProductForm();
     if (target.dataset.editProduct) openProductForm(state.products.find((item) => item.id === target.dataset.editProduct));
     if (target.dataset.viewProduct) window.open(`/product?id=${target.dataset.viewProduct}`, "_blank");
     if (target.dataset.duplicateProduct) {
@@ -340,19 +445,41 @@ document.addEventListener("click", async (event) => {
     }
     if (target.dataset.toggleProduct) {
       const product = state.products.find((item) => item.id === target.dataset.toggleProduct);
+      const nextAction = product.status === "Published" ? "Unpublish" : "Publish";
+      const confirmed = await confirmDialog({
+        title: `${nextAction} Product`,
+        message: `${nextAction} ${product.name}?`,
+        confirmText: nextAction,
+      });
+      if (!confirmed) return;
       await api(`products/${product.id}`, { method: "PUT", body: JSON.stringify({ status: product.status === "Published" ? "Draft" : "Published" }) });
       await loadAll();
+      toast(product.status === "Published" ? "Product unpublished" : "Product published");
     }
-    if (target.dataset.deleteProduct && confirm("Delete this product?")) {
+    if (target.dataset.deleteProduct) {
+      const product = state.products.find((item) => item.id === target.dataset.deleteProduct);
+      const confirmed = await confirmDialog({
+        title: "Delete Product",
+        message: `Delete ${product?.name || "this product"}? This cannot be undone.`,
+        confirmText: "Delete",
+      });
+      if (!confirmed) return;
       await api(`products/${target.dataset.deleteProduct}`, { method: "DELETE" });
       await loadAll();
+      toast("Product deleted");
+    }
+    if (target.dataset.resetProducts !== undefined) {
+      $("[data-product-search]").value = "";
+      $$("[data-product-filter]").forEach((select) => (select.value = ""));
+      state.productPage = 1;
+      renderProducts();
     }
     if (target.dataset.pagePrev !== undefined) {
       state.productPage = Math.max(1, state.productPage - 1);
       renderProducts();
     }
     if (target.dataset.pageNext !== undefined) {
-      state.productPage += 1;
+      state.productPage = Math.min(Math.ceil(filteredProducts().length / pageSize) || 1, state.productPage + 1);
       renderProducts();
     }
     if (target.dataset.newCategory !== undefined) openCategoryForm();
@@ -419,6 +546,7 @@ $("[data-featured-upload]").addEventListener("change", async (event) => {
   const url = await uploadFile(event.target.files[0], "product-images");
   $("[data-product-form]").elements.featuredImage.value = url;
   renderImagePreviews();
+  toast("Featured image uploaded");
 });
 
 $("[data-gallery-upload]").addEventListener("change", async (event) => {
@@ -426,6 +554,7 @@ $("[data-gallery-upload]").addEventListener("change", async (event) => {
   for (const file of event.target.files) urls.push(await uploadFile(file, "product-images"));
   state.editingProduct = { ...(state.editingProduct || {}), galleryImages: urls };
   renderImagePreviews();
+  toast("Gallery images uploaded");
 });
 
 if (state.token) {
